@@ -29,6 +29,9 @@ RUN apt-get update && apt-get install -y \
     python3-serial \
     && rm -rf /var/lib/apt/lists/*
 
+# Serial port access
+RUN usermod -aG dialout $USERNAME    
+
 COPY entrypoint.sh /entrypoint.sh
 COPY bashrc /home/$USERNAME/.bashrc
 
