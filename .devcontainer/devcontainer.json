@@ -1,5 +1,5 @@
 {
-  "name": "humble desktop",
+  "name": "go2",
   "dockerFile": "Dockerfile",
   "runArgs": [
     "--privileged",
