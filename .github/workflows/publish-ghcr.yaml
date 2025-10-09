@@ -12,5 +12,8 @@ jobs:
       - name: Build and push the image
         run:  |
           docker login --username baodn19 --password ${{ secrets.GH_PAT  }} ghcr.io
+          docker run --rm --privileged tonistiigi/binfmt --install all
+          docker buildx create --name multiarch-builder --use
+          docker buildx inspect --bootstrap
           docker buildx build . --tag ghcr.io/baodn19/go2:latest --platform linux/amd64,linux/arm64
           docker push ghcr.io/baodn19/go2:latest
