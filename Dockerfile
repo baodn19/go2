@@ -24,7 +24,6 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     ros-humble-xacro \
     ros-humble-gz-ros2-control \
     ros-humble-ros2-controllers \
-    || (apt-cache policy ros-humble-gazebo-ros2-control && exit 1) \
     && rm -rf /var/lib/apt/lists/*
 
 # Switch from root to user
