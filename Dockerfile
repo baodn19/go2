@@ -1,4 +1,4 @@
-FROM osrf/ros:humble-desktop 
+FROM ros:humble-ros-base 
 
 # Add ubuntu user with same UID and GID as your host system, if it doesn't already exist
 # Since Ubuntu 24.04, a non-root user is created by default with the name vscode and UID=1000
@@ -18,6 +18,7 @@ RUN apt-get update && \
 # Packages for running URDF, Gazebo, and Rviz
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends \
+    ros-humble-rviz2 \
     ros-humble-joint-state-publisher-gui \
     ros-humble-robot-state-publisher \
     ros-humble-xacro \
