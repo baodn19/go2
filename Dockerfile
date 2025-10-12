@@ -9,6 +9,7 @@ RUN if ! id -u $USER_UID >/dev/null 2>&1; then \
         groupadd --gid $USER_GID $USERNAME && \
         useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME; \
     fi
+
 # Add sudo support for the non-root user
 RUN apt-get update && \
     apt-get install -y sudo && \
@@ -26,6 +27,14 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     ros-humble-ros2-controllers \
     && rm -rf /var/lib/apt/lists/*
 
+# Packages for image and vision processing 
+RUN apt-get update \
+    && apt-get install -y \
+    ros-humble-image-tools \
+    ros-humble-vision-msgs \
+    python3-pip \
+    && rm -rf /var/lib/apt/lists/*
+
 # Switch from root to user
 USER $USERNAME
 
@@ -41,5 +50,35 @@ RUN sudo apt install -y git
 # Rosdep update
 RUN rosdep update
 
+######################
+## .bashrc sections ##
+######################
+
 # Source the ROS setup file
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
+
+# Set DOMAIN_ID for Go2 Robot
+RUN echo "export ROS_DOMAIN_ID=10" >> ~/.bashrc
+
+# Set Physical Robot connection parameters
+RUN echo "export ROBOT_IP=\"192.168.0.224\"" >> ~/.bashrc
+RUN echo "CONN_TYPE=\"webrtc\"" >> ~/.bashrc
+
+###############################
+## Setting up ROS2 workspace ##
+###############################
+
+# Create a workspace
+RUN mkdir -p ~/go2_ws/src
+WORKDIR /home/$USERNAME/go2_ws/src
+
+# Clone the Unofficial Go2 ROS2 SDK repository & Install dependencies
+RUN git clone --recurse-submodules https://github.com/abizovnuralem/go2_ros2_sdk.git go2_ros2_sdk
+WORKDIR /home/$USERNAME/go2_ws/src/go2_ros2_sdk
+RUN pip install --break-system-packages -r requirements.txt
+
+# Install additional dependencies using rosdep and colcon build
+WORKDIR /home/$USERNAME/go2_ws
+RUN rosdep install --from-paths src --ignore-src -r -y
+RUN colcon build --symlink-install
+RUN source install/setup.bash
