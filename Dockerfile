@@ -75,7 +75,8 @@ WORKDIR /home/$USERNAME/go2_ws/src
 # Clone the Unofficial Go2 ROS2 SDK repository & Install dependencies
 RUN git clone --recurse-submodules https://github.com/abizovnuralem/go2_ros2_sdk.git go2_ros2_sdk
 WORKDIR /home/$USERNAME/go2_ws/src/go2_ros2_sdk
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt && \
+    rm -rf ~/.cache/pip
 
 # Install additional dependencies using rosdep and colcon build
 WORKDIR /home/$USERNAME/go2_ws
