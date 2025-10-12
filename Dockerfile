@@ -35,6 +35,15 @@ RUN apt-get update \
     python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
+# Install Git and ROS2 build tools
+RUN apt-get update \
+    && apt-get install -y \
+    git \
+    ros-humble-ament-cmake \
+    ros-humble-ament-cmake-python \
+    python3-colcon-common-extensions \
+    && rm -rf /var/lib/apt/lists/*
+
 # Switch from root to user
 USER $USERNAME
 
@@ -43,9 +52,6 @@ RUN sudo usermod --append --groups video $USERNAME
 
 # Update all packages
 RUN sudo apt update && sudo apt upgrade -y
-
-# Install Git
-RUN sudo apt install -y git
 
 # Rosdep update
 RUN rosdep update
