@@ -26,6 +26,7 @@ RUN apt-get update \
     ros-humble-builtin-interfaces \
     python3-empy \
     python3-lark \
+    python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
 # Add user to video group to allow access to webcam
@@ -93,7 +94,6 @@ RUN apt-get update \
     && apt-get install -y \
     ros-humble-image-tools \
     ros-humble-vision-msgs \
-    python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Git and ROS2 build tools
