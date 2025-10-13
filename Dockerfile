@@ -27,6 +27,7 @@ RUN apt-get update \
     python3-empy \
     python3-lark \
     python3-pip \
+    git \
     && rm -rf /var/lib/apt/lists/*
 
 # Add user to video group to allow access to webcam
@@ -100,7 +101,6 @@ RUN apt-get update \
 # Install Git and ROS2 build tools
 RUN apt-get update \
     && apt-get install -y \
-    git \
     ros-humble-ament-cmake \
     ros-humble-ament-cmake-python \
     python3-colcon-common-extensions \
