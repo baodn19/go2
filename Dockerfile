@@ -84,8 +84,11 @@ WORKDIR /home/$USERNAME/go2_ws/src/go2_ros2_sdk
 RUN pip install --no-cache-dir -r requirements.txt && \
     rm -rf ~/.cache/pip
 
-# Install additional dependencies using rosdep and colcon build
+# Make bash the default shell for RUN so `source` works
+SHELL ["/bin/bash", "-lc"]
+
+# Build workspace with ROS environment loaded
 WORKDIR /home/$USERNAME/go2_ws
-RUN rosdep install --from-paths src --ignore-src -r -y
-RUN colcon build --symlink-install
-RUN source install/setup.bash
+RUN source /opt/ros/${ROS_DISTRO}/setup.bash \
+ && rosdep install --from-paths src --ignore-src -r -y --rosdistro ${ROS_DISTRO} \
+ && colcon build --symlink-install
