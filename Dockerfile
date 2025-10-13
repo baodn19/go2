@@ -33,7 +33,7 @@ RUN apt-get update \
 RUN usermod --append --groups video $USERNAME
 
 # Update all packages
-RUN apt update && sudo apt upgrade -y
+RUN apt update && apt upgrade -y
 
 # Switch from root to user
 USER $USERNAME
