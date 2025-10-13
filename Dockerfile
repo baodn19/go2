@@ -44,17 +44,14 @@ RUN apt-get update \
     python3-colcon-common-extensions \
     && rm -rf /var/lib/apt/lists/*
 
-# Switch from root to user
-USER $USERNAME
-
 # Add user to video group to allow access to webcam
-RUN sudo usermod --append --groups video $USERNAME
+RUN usermod --append --groups video $USERNAME
 
 # Update all packages
-RUN sudo apt update && sudo apt upgrade -y
+RUN apt update && sudo apt upgrade -y
 
-# Rosdep update
-RUN rosdep update
+# Switch from root to user
+USER $USERNAME
 
 ######################
 ## .bashrc sections ##
@@ -67,8 +64,8 @@ RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
 RUN echo "export ROS_DOMAIN_ID=10" >> ~/.bashrc
 
 # Set Physical Robot connection parameters
-RUN echo "export ROBOT_IP=\"192.168.0.224\"" >> ~/.bashrc
-RUN echo "CONN_TYPE=\"webrtc\"" >> ~/.bashrc
+RUN echo "export ROBOT_IP=\"192.168.0.224\"" >> ~/.bashrc \
+    && echo "CONN_TYPE=\"webrtc\"" >> ~/.bashrc
 
 ###############################
 ## Setting up ROS2 workspace ##
@@ -90,5 +87,6 @@ SHELL ["/bin/bash", "-lc"]
 # Build workspace with ROS environment loaded
 WORKDIR /home/$USERNAME/go2_ws
 RUN source /opt/ros/${ROS_DISTRO}/setup.bash \
+ && rosdep update \
  && rosdep install --from-paths src --ignore-src -r -y --rosdistro ${ROS_DISTRO} \
  && colcon build --symlink-install
