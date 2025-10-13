@@ -40,6 +40,7 @@ RUN apt update && apt upgrade -y
 
 # Initialize rosdep
 RUN rosdep init || true
+RUN rosdep update
 
 # Switch from root to user
 USER $USERNAME
@@ -72,17 +73,11 @@ WORKDIR /home/$USERNAME/go2_ws/src/go2_ros2_sdk
 RUN pip install --no-cache-dir -r requirements.txt && \
     rm -rf ~/.cache/pip
 
-# Make bash the default shell for RUN so `source` works
-SHELL ["/bin/bash", "-lc"]
-
-# Build workspace with ROS environment loaded
-WORKDIR /home/$USERNAME/go2_ws
-RUN source /opt/ros/${ROS_DISTRO}/setup.bash && rosdep update
-
 # Switch back to root to install dependencies
 USER root
-RUN source /opt/ros/${ROS_DISTRO}/setup.bash \
-    && rosdep install --from-paths src --ignore-src -r -y --rosdistro ${ROS_DISTRO}
+WORKDIR /home/$USERNAME/go2_ws
+RUN /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash && \
+    rosdep install --from-paths src --ignore-src -r -y --rosdistro ${ROS_DISTRO}"
 
 # Packages for running URDF, Gazebo, and Rviz
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
@@ -112,4 +107,4 @@ RUN apt-get update \
 
 # Drop privileges for the build
 USER ${USERNAME}
-RUN source /opt/ros/${ROS_DISTRO}/setup.bash && colcon build --symlink-install
+RUN /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash && colcon build --symlink-install"
