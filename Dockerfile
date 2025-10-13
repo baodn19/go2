@@ -44,6 +44,13 @@ RUN apt-get update \
     python3-colcon-common-extensions \
     && rm -rf /var/lib/apt/lists/*
 
+# Install interface and runtime dependencies
+RUN apt-get update \
+    && apt-get install -y \
+    ros-humble-builtin-interfaces \
+    ros-humble-rosidl-default-runtime \
+    && rm -rf /var/lib/apt/lists/*
+
 # Switch from root to user
 USER $USERNAME
 
