@@ -1,4 +1,4 @@
-FROM arm64v8/ros:humble-ros-base 
+FROM arm64v8/ros:humble-ros-core
 
 # Add ubuntu user with same UID and GID as your host system, if it doesn't already exist
 # Since Ubuntu 24.04, a non-root user is created by default with the name vscode and UID=1000
@@ -84,6 +84,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     ros-humble-rviz2 \
     ros-humble-joint-state-publisher-gui \
     ros-humble-robot-state-publisher \
+    ros-humble-rosbag2 \
     ros-humble-xacro \
     ros-humble-gz-ros2-control \
     ros-humble-ros2-controllers \
