@@ -10,6 +10,12 @@ RUN if ! id -u $USER_UID >/dev/null 2>&1; then \
         useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME; \
     fi 
 
+# Add sudo support for the non-root user
+RUN apt-get update && \
+    apt-get install -y sudo && \
+    echo "$USERNAME ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME && \
+    chmod 0440 /etc/sudoers.d/$USERNAME
+
 # Packages for running URDF, Gazebo, and Rviz
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends \
@@ -43,8 +49,6 @@ RUN usermod --append --groups video $USERNAME
 
 # Update all packages
 RUN apt update && sudo apt upgrade -y
-
-RUN rosdep update
 
 # Switch from root to user
 USER $USERNAME
@@ -83,5 +87,6 @@ SHELL ["/bin/bash", "-lc"]
 # Build workspace with ROS environment loaded
 WORKDIR /home/$USERNAME/go2_ws
 RUN source /opt/ros/${ROS_DISTRO}/setup.bash \
- && rosdep install --from-paths src --ignore-src -r -y --rosdistro ${ROS_DISTRO} \
+ && sudo rosdep update \
+ && sudo rosdep install --from-paths src --ignore-src -r -y --rosdistro ${ROS_DISTRO} \
  && colcon build --symlink-install
