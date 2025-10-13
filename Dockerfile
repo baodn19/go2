@@ -44,7 +44,7 @@ RUN usermod --append --groups video $USERNAME
 # Update all packages
 RUN apt update && sudo apt upgrade -y
 
-RUN rosdep init
+RUN rosdep update
 
 # Switch from root to user
 USER $USERNAME
@@ -83,6 +83,5 @@ SHELL ["/bin/bash", "-lc"]
 # Build workspace with ROS environment loaded
 WORKDIR /home/$USERNAME/go2_ws
 RUN source /opt/ros/${ROS_DISTRO}/setup.bash \
- && rosdep update \
  && rosdep install --from-paths src --ignore-src -r -y --rosdistro ${ROS_DISTRO} \
  && colcon build --symlink-install
