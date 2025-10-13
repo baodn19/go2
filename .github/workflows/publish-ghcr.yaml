@@ -1,4 +1,4 @@
-name: Build arm64 image
+name: Build multi-arch image
 
 on:
   push:
@@ -8,7 +8,7 @@ permissions:
   packages: write
 
 jobs:
-  build_and_push_arm64:
+  build_and_push_multiarch:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,12 +24,12 @@ jobs:
           username: baodn19
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push (arm64)
+      - name: Build and push multi-arch image
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
           tags: ghcr.io/baodn19/go2:latest
-          platforms: linux/arm64
+          platforms: linux/amd64,linux/arm64
           cache-from: type=gha
           cache-to: type=gha,mode=max

@@ -1,4 +1,4 @@
-FROM arm64v8/ros:humble-ros-core
+FROM ros:humble-ros-core
 
 # Add ubuntu user with same UID and GID as your host system, if it doesn't already exist
 # Since Ubuntu 24.04, a non-root user is created by default with the name vscode and UID=1000
@@ -69,6 +69,7 @@ WORKDIR /home/$USERNAME/go2_ws/src
 
 # Clone the Unofficial Go2 ROS2 SDK repository & Install dependencies
 RUN git clone --recurse-submodules https://github.com/abizovnuralem/go2_ros2_sdk.git go2_ros2_sdk
+RUN git clone -b humble https://github.com/ros2/common_interfaces.git
 WORKDIR /home/$USERNAME/go2_ws/src/go2_ros2_sdk
 RUN pip install --no-cache-dir -r requirements.txt && \
     rm -rf ~/.cache/pip
@@ -105,8 +106,5 @@ RUN apt-get update \
     ros-humble-ament-cmake-python \
     && rm -rf /var/lib/apt/lists/*
 
-# Drop privileges for the build
+# Drop privileges
 USER ${USERNAME}
-RUN /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash \
-    && find /opt/ros/humble/ -name '*builtin_interfaces__rosidl_generator_c*' \
-    && colcon build --symlink-install"
