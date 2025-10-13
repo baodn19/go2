@@ -38,6 +38,20 @@ RUN apt-get update \
     python3-colcon-common-extensions \
     && rm -rf /var/lib/apt/lists/*
 
+# Install ROS 2 interface packages
+RUN apt-get update \
+    && apt-get install -y \
+    ros-humble-rosidl-default-generators \
+    ros-humble-rosidl-default-runtime \
+    ros-humble-rosidl-generator-c \
+    ros-humble-rosidl-generator-cpp \
+    ros-humble-rosidl-typesupport-c \
+    ros-humble-rosidl-typesupport-cpp \
+    ros-humble-builtin-interfaces \
+    python3-empy \
+    python3-lark-parser \
+    && rm -rf /var/lib/apt/lists/*
+
 # Add user to video group to allow access to webcam
 RUN usermod --append --groups video $USERNAME
 
