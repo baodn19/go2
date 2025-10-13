@@ -44,6 +44,8 @@ RUN usermod --append --groups video $USERNAME
 # Update all packages
 RUN apt update && sudo apt upgrade -y
 
+RUN rosdep init
+
 # Switch from root to user
 USER $USERNAME
 
