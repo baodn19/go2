@@ -49,7 +49,7 @@ RUN apt-get update \
     ros-humble-rosidl-typesupport-cpp \
     ros-humble-builtin-interfaces \
     python3-empy \
-    python3-lark-parser \
+    python3-lark \
     && rm -rf /var/lib/apt/lists/*
 
 # Add user to video group to allow access to webcam
