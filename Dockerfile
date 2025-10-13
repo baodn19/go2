@@ -1,4 +1,4 @@
-FROM arm64v8/ros:humble-ros-core
+FROM arm64v8/ros:humble-desktop
 
 # Add ubuntu user with same UID and GID as your host system, if it doesn't already exist
 # Since Ubuntu 24.04, a non-root user is created by default with the name vscode and UID=1000
@@ -107,4 +107,6 @@ RUN apt-get update \
 
 # Drop privileges for the build
 USER ${USERNAME}
-RUN /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash && colcon build --symlink-install"
+RUN /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash \
+    && find /opt/ros/humble/ -name '*builtin_interfaces__rosidl_generator_c*' \
+    && colcon build --symlink-install"
