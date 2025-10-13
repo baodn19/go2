@@ -10,34 +10,6 @@ RUN if ! id -u $USER_UID >/dev/null 2>&1; then \
         useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME; \
     fi 
 
-# Packages for running URDF, Gazebo, and Rviz
-RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -y install --no-install-recommends \
-    ros-humble-rviz2 \
-    ros-humble-joint-state-publisher-gui \
-    ros-humble-robot-state-publisher \
-    ros-humble-xacro \
-    ros-humble-gz-ros2-control \
-    ros-humble-ros2-controllers \
-    && rm -rf /var/lib/apt/lists/*
-
-# Packages for image and vision processing 
-RUN apt-get update \
-    && apt-get install -y \
-    ros-humble-image-tools \
-    ros-humble-vision-msgs \
-    python3-pip \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install Git and ROS2 build tools
-RUN apt-get update \
-    && apt-get install -y \
-    git \
-    ros-humble-ament-cmake \
-    ros-humble-ament-cmake-python \
-    python3-colcon-common-extensions \
-    && rm -rf /var/lib/apt/lists/*
-
 # Install ROS 2 interface packages
 RUN apt-get update \
     && apt-get install -y \
@@ -47,6 +19,10 @@ RUN apt-get update \
     ros-humble-rosidl-generator-cpp \
     ros-humble-rosidl-typesupport-c \
     ros-humble-rosidl-typesupport-cpp \
+    ros-humble-rosidl-typesupport-introspection-c \
+    ros-humble-rosidl-typesupport-introspection-cpp \
+    ros-humble-rosidl-typesupport-fastrtps-c \
+    ros-humble-rosidl-typesupport-fastrtps-cpp \
     ros-humble-builtin-interfaces \
     python3-empy \
     python3-lark \
@@ -100,6 +76,34 @@ RUN source /opt/ros/${ROS_DISTRO}/setup.bash && rosdep update
 USER root
 RUN source /opt/ros/${ROS_DISTRO}/setup.bash \
     && rosdep install --from-paths src --ignore-src -r -y --rosdistro ${ROS_DISTRO}
+
+# Packages for running URDF, Gazebo, and Rviz
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get -y install --no-install-recommends \
+    ros-humble-rviz2 \
+    ros-humble-joint-state-publisher-gui \
+    ros-humble-robot-state-publisher \
+    ros-humble-xacro \
+    ros-humble-gz-ros2-control \
+    ros-humble-ros2-controllers \
+    && rm -rf /var/lib/apt/lists/*
+
+# Packages for image and vision processing 
+RUN apt-get update \
+    && apt-get install -y \
+    ros-humble-image-tools \
+    ros-humble-vision-msgs \
+    python3-pip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Git and ROS2 build tools
+RUN apt-get update \
+    && apt-get install -y \
+    git \
+    ros-humble-ament-cmake \
+    ros-humble-ament-cmake-python \
+    python3-colcon-common-extensions \
+    && rm -rf /var/lib/apt/lists/*
 
 # Drop privileges for the build
 USER ${USERNAME}
