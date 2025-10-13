@@ -1,4 +1,4 @@
-FROM ros:humble-ros-base 
+FROM arm64v8/ros:humble-ros-base 
 
 # Add ubuntu user with same UID and GID as your host system, if it doesn't already exist
 # Since Ubuntu 24.04, a non-root user is created by default with the name vscode and UID=1000
@@ -42,13 +42,6 @@ RUN apt-get update \
     ros-humble-ament-cmake \
     ros-humble-ament-cmake-python \
     python3-colcon-common-extensions \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install interface and runtime dependencies
-RUN apt-get update \
-    && apt-get install -y \
-    ros-humble-builtin-interfaces \
-    ros-humble-rosidl-default-runtime \
     && rm -rf /var/lib/apt/lists/*
 
 # Switch from root to user
