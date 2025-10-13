@@ -1,4 +1,4 @@
-FROM ros:humble-desktop
+FROM osrf/ros:humble-desktop
 
 # Add ubuntu user with same UID and GID as your host system, if it doesn't already exist
 # Since Ubuntu 24.04, a non-root user is created by default with the name vscode and UID=1000
