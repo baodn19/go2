@@ -27,6 +27,8 @@ RUN apt-get update \
     python3-empy \
     python3-lark \
     python3-pip \
+    python3-rosdep \
+    python3-colcon-common-extensions \
     git \
     && rm -rf /var/lib/apt/lists/*
 
@@ -35,6 +37,9 @@ RUN usermod --append --groups video $USERNAME
 
 # Update all packages
 RUN apt update && apt upgrade -y
+
+# Initialize rosdep
+RUN rosdep init || true
 
 # Switch from root to user
 USER $USERNAME
@@ -103,7 +108,6 @@ RUN apt-get update \
     && apt-get install -y \
     ros-humble-ament-cmake \
     ros-humble-ament-cmake-python \
-    python3-colcon-common-extensions \
     && rm -rf /var/lib/apt/lists/*
 
 # Drop privileges for the build
