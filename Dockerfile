@@ -11,7 +11,7 @@ RUN if ! id -u $USER_UID >/dev/null 2>&1; then \
     fi 
 
 # Install ROS 2 interface packages
-RUN apt-get update \
+RUN apt-get update \ 
     && apt-get install -y \
     ros-humble-rosidl-default-generators \
     ros-humble-rosidl-default-runtime \
