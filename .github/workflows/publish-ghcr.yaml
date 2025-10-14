@@ -34,7 +34,7 @@ jobs:
         with:
           registry: ghcr.io
           username: baodn19
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.GH_PAT }}
 
       - name: Build and push (multi-arch)
         uses: docker/build-push-action@v6
