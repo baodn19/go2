@@ -30,6 +30,7 @@ RUN apt-get update \
     python3-rosdep \
     python3-colcon-common-extensions \
     git \
+    nano \
     && rm -rf /var/lib/apt/lists/*
 
 # Add user to video group to allow access to webcam
@@ -69,7 +70,6 @@ WORKDIR /home/$USERNAME/go2_ws/src
 
 # Clone the Unofficial Go2 ROS2 SDK repository & Install dependencies
 RUN git clone --recurse-submodules https://github.com/abizovnuralem/go2_ros2_sdk.git go2_ros2_sdk
-RUN git clone -b humble https://github.com/ros2/common_interfaces.git
 WORKDIR /home/$USERNAME/go2_ws/src/go2_ros2_sdk
 RUN pip install --no-cache-dir -r requirements.txt && \
     rm -rf ~/.cache/pip
